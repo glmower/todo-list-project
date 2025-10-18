@@ -1,6 +1,8 @@
 package App;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class App {
 
@@ -9,42 +11,55 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         boolean running = true;
+        Scanner scnr = new Scanner(System.in);
         while (running) {
             printMainMenu();
-            int choice = Integer.parseInt(System.console().readLine());
-            switch (choice) {
-                case 1:
-                    createNewList();
-                    break;
-                case 2:
-                    viewAllLists();
-                    break;
-                case 3:
-                    viewList();
-                    break;
-                case 4:
-                    addItemToList();
-                    break;
-                case 5:
-                    removeItemFromList();
-                    break;
-                case 6:
-                    markItemAsDone();
-                    break;
-                case 7:
-                    markItemAsNotDone();
-                    break;
-                case 8:
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-                    break;
+            try {
+                int choice = scnr.nextInt();
+                printDivider();
+                switch (choice) {
+                    case 1:
+                        createNewList();
+                        break;
+                    case 2:
+                        viewAllLists();
+                        break;
+                    case 3:
+                        viewList();
+                        break;
+                    case 4:
+                        addItemToList();
+                        break;
+                    case 5:
+                        removeItemFromList();
+                        break;
+                    case 6:
+                        markItemAsDone();
+                        break;
+                    case 7:
+                        markItemAsNotDone();
+                        break;
+                    case 8:
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Invalid choice");
+
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input");
+                scnr.nextLine();
             }
         }
+        scnr.close();
+    }
+
+    public static void printDivider() {
+        System.out.println("--------------------------------------------------");
     }
 
     public static void printMainMenu() {
+        printDivider();
         System.out.println("Main Menu");
         System.out.println("1. Create a new list");
         System.out.println("2. View all lists");
@@ -61,26 +76,32 @@ public class App {
         System.out.print("Enter the name of the new list: ");
         String name = System.console().readLine();
         List list = new List(name);
+        lists.add(list);
         System.out.println("List created successfully");
     }
 
     public static void viewAllLists() {
+        printDivider();
         System.out.println("All Lists");
         for (List list : lists) {
             System.out.println(list.getName());
         }
+        printDivider();
     }
 
     public static void viewList() {
+        printDivider();
         System.out.print("Enter the name of the list to view: ");
         String name = System.console().readLine();
         List list = findList(name);
         if (list != null) {
             list.print();
         }
+        printDivider();
     }
 
     public static void addItemToList() {
+        printDivider();
         System.out.print("Enter the name of the list to add the item to: ");
         String name = System.console().readLine();
         List list = findList(name);
@@ -89,10 +110,14 @@ public class App {
             String item = System.console().readLine();
             list.add(item);
             System.out.println("Item added successfully");
+        } else {
+            System.out.println("List not found");
         }
+        printDivider();
     }
 
     public static void removeItemFromList() {
+        printDivider();
         System.out.print("Enter the name of the list to remove the item from: ");
         String name = System.console().readLine();
         List list = findList(name);
@@ -101,10 +126,14 @@ public class App {
             int index = Integer.parseInt(System.console().readLine());
             list.remove(index);
             System.out.println("Item removed successfully");
+        } else {
+            System.out.println("List not found");
         }
+        printDivider();
     }
 
     public static void markItemAsDone() {
+        printDivider();
         System.out.print("Enter the name of the list to mark the item as done: ");
         String name = System.console().readLine();
         List list = findList(name);
@@ -113,10 +142,14 @@ public class App {
             int index = Integer.parseInt(System.console().readLine());
             list.markAsDone(index);
             System.out.println("Item marked as done successfully");
+        } else {
+            System.out.println("List not found");
         }
+        printDivider();
     }
 
     public static void markItemAsNotDone() {
+        printDivider();
         System.out.print("Enter the name of the list to mark the item as not done: ");
         String name = System.console().readLine();
         List list = findList(name);
@@ -125,7 +158,10 @@ public class App {
             int index = Integer.parseInt(System.console().readLine());
             list.markAsNotDone(index);
             System.out.println("Item marked as not done successfully");
+        } else {
+            System.out.println("List not found");
         }
+        printDivider();
     }
 
     public static List findList(String name) {
